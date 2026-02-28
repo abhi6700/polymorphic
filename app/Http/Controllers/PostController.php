@@ -16,19 +16,18 @@ class PostController extends Controller
         try {
             $post = Post::with('comments')->get(['id', 'title', 'content']);
             if ($post->isNotEmpty()) {
-                return json_encode([
+                return response()->json([
                     'status' => true,
                     'post' => $post
                 ]);
             } else {
-                return json_encode([
+                return response()->json([
                     'status' => false,
                     'message' => 'Post not found'
                 ]);
             }
-           
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!'
             ]);
@@ -46,12 +45,12 @@ class PostController extends Controller
                 'title' => ucfirst($validated['title']),
                 'content' => ucfirst($validated['content']),
             ]);
-            return json_encode([
+            return response()->json([
                 'status' => true,
                 'message' => 'Post created successfully'
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!'
             ]);
@@ -66,19 +65,19 @@ class PostController extends Controller
         try {
             $post = Post::select('id', 'title', 'content')->find($id);
             if ($post) {
-                return json_encode([
+                return response()->json([
                     'status' => true,
                     'post' => $post
                 ]);
             } else {
-                return json_encode([
+                return response()->json([
                     'status' => false,
                     'message' => 'Post not found'
                 ]);
             }
            
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!',
                 'erorr' => $th->getMessage()
@@ -98,12 +97,12 @@ class PostController extends Controller
                 'title' => ucfirst($validated['title']),
                 'content' => ucfirst($validated['content']),
             ]);
-            return json_encode([
+            return response()->json([
                 'status' => true,
                 'message' => 'Post update successfully'
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!'
             ]);
@@ -115,14 +114,14 @@ class PostController extends Controller
      */
     public function destroy(string $id)
     {
-         try {
+        try {
             Post::find($id)->delete();
-            return json_encode([
+            return response()->json([
                 'status' => true,
                 'message' => 'Post deleted successfully'
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!'
             ]);

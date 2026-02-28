@@ -20,7 +20,7 @@ class CommentController extends Controller
                 'comments' => $post->comments
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!',
                 'erorr' => $th->getMessage()
@@ -40,12 +40,12 @@ class CommentController extends Controller
                 'post_id' => $post->id,
                 'comment' => ucfirst($validated['comment']),
             ]);
-            return json_encode([
+            return response()->json([
                 'status' => true,
                 'message' => 'Comment created successfully'
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!',
             ]);
@@ -60,19 +60,19 @@ class CommentController extends Controller
         try {
             $comment = Comment::select('id', 'comment')->find($id);
             if ($comment) {
-                return json_encode([
+                return response()->json([
                     'status' => true,
                     'comment' => $comment
                 ]);
             } else {
-                return json_encode([
+                return response()->json([
                     'status' => false,
                     'message' => 'Comment not found'
                 ]);
             }
            
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!',
                 'erorr' => $th->getMessage()
@@ -91,12 +91,12 @@ class CommentController extends Controller
             $comment->update([
                 'comment' => ucfirst($validated['comment']),
             ]);
-            return json_encode([
+            return response()->json([
                 'status' => true,
                 'message' => 'Comment update successfully'
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!'
             ]);
@@ -110,12 +110,12 @@ class CommentController extends Controller
     {
         try {
             Comment::find($id)->delete();
-            return json_encode([
+            return response()->json([
                 'status' => true,
                 'message' => 'Comment deleted successfully'
             ]);
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!'
             ]);

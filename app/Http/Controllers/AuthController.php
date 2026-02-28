@@ -16,23 +16,23 @@ class AuthController extends Controller
                 'email' => $validated['email'],
                 'password' => $validated['password']
             ]);
-            $user = User::where('email', $request->email)->first();
-            $token = $user->createToken('api-token')->plainTextToken;
             if ($auth) {
-                return json_encode([
+                $user = User::where('email', $validated['email'])->first();
+                $token = $user->createToken('api-token')->plainTextToken;
+                return response()->json([
                     'status' => true,
                     'message' => 'Login successfully',
                     'token' => $token
                 ]);
             } else {
-                return json_encode([
+                return response()->json([
                     'status' => false,
                     'message' => 'Invalid email or password'
                 ]);
             }
             
         } catch (\Throwable $th) {
-            return json_encode([
+            return response()->json([
                 'status' => false,
                 'message' => 'Something went wrong!',
                 'erorr' => $th->getMessage()
