@@ -3,10 +3,9 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\comment\StoreRequest;
+use App\Http\Requests\comment\UpdateRequest;
 use App\Models\Comment;
 use App\Models\Post;
-use Illuminate\Http\Request;
-use Symfony\Component\HttpKernel\HttpCache\Store;
 
 class CommentController extends Controller
 {
@@ -58,15 +57,50 @@ class CommentController extends Controller
      */
     public function show(string $id)
     {
-        //
+        try {
+            $comment = Comment::select('id', 'comment')->find($id);
+            if ($comment) {
+                return json_encode([
+                    'status' => true,
+                    'comment' => $comment
+                ]);
+            } else {
+                return json_encode([
+                    'status' => false,
+                    'message' => 'Comment not found'
+                ]);
+            }
+           
+        } catch (\Throwable $th) {
+            return json_encode([
+                'status' => false,
+                'message' => 'Something went wrong!',
+                'erorr' => $th->getMessage()
+            ]);
+        }
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(UpdateRequest $request, string $id)
     {
-        //
+        try {
+            $comment = Comment::findOrFail($id);
+            $validated = $request->validated();
+            $comment->update([
+                'comment' => ucfirst($validated['comment']),
+            ]);
+            return json_encode([
+                'status' => true,
+                'message' => 'Comment update successfully'
+            ]);
+        } catch (\Throwable $th) {
+            return json_encode([
+                'status' => false,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 
     /**
@@ -74,6 +108,17 @@ class CommentController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        try {
+            Comment::find($id)->delete();
+            return json_encode([
+                'status' => true,
+                'message' => 'Comment deleted successfully'
+            ]);
+        } catch (\Throwable $th) {
+            return json_encode([
+                'status' => false,
+                'message' => 'Something went wrong!'
+            ]);
+        }
     }
 }

@@ -5,7 +5,6 @@ namespace App\Http\Controllers;
 use App\Http\Requests\post\StoreRequest;
 use App\Http\Requests\post\UpdateRequest;
 use App\Models\Post;
-use Illuminate\Http\Request;
 
 class PostController extends Controller
 {
@@ -14,8 +13,8 @@ class PostController extends Controller
      */
     public function index()
     {
-         try {
-            $post = Post::get(['id', 'title', 'content']);
+        try {
+            $post = Post::with('comments')->get(['id', 'title', 'content']);
             if ($post->isNotEmpty()) {
                 return json_encode([
                     'status' => true,
